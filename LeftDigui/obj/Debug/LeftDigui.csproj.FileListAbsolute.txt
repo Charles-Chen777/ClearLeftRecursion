@@ -1,0 +1,18 @@
+c:\users\administrator\documents\visual studio 2013\Projects\LeftDigui\LeftDigui\bin\Debug\LeftDigui.exe.config
+c:\users\administrator\documents\visual studio 2013\Projects\LeftDigui\LeftDigui\bin\Debug\LeftDigui.exe
+c:\users\administrator\documents\visual studio 2013\Projects\LeftDigui\LeftDigui\bin\Debug\LeftDigui.pdb
+c:\users\administrator\documents\visual studio 2013\Projects\LeftDigui\LeftDigui\obj\Debug\LeftDigui.csprojResolveAssemblyReference.cache
+c:\users\administrator\documents\visual studio 2013\Projects\LeftDigui\LeftDigui\obj\Debug\LeftDigui.Form1.resources
+c:\users\administrator\documents\visual studio 2013\Projects\LeftDigui\LeftDigui\obj\Debug\LeftDigui.Properties.Resources.resources
+c:\users\administrator\documents\visual studio 2013\Projects\LeftDigui\LeftDigui\obj\Debug\LeftDigui.csproj.GenerateResource.Cache
+c:\users\administrator\documents\visual studio 2013\Projects\LeftDigui\LeftDigui\obj\Debug\LeftDigui.exe
+c:\users\administrator\documents\visual studio 2013\Projects\LeftDigui\LeftDigui\obj\Debug\LeftDigui.pdb
+F:\MyGitHub\LeftDigui\LeftDigui\bin\Debug\LeftDigui.exe.config
+F:\MyGitHub\LeftDigui\LeftDigui\obj\Debug\LeftDigui.exe
+F:\MyGitHub\LeftDigui\LeftDigui\obj\Debug\LeftDigui.pdb
+F:\MyGitHub\LeftDigui\LeftDigui\bin\Debug\LeftDigui.exe
+F:\MyGitHub\LeftDigui\LeftDigui\bin\Debug\LeftDigui.pdb
+F:\MyGitHub\LeftDigui\LeftDigui\obj\Debug\LeftDigui.csprojResolveAssemblyReference.cache
+F:\MyGitHub\LeftDigui\LeftDigui\obj\Debug\LeftDigui.Form1.resources
+F:\MyGitHub\LeftDigui\LeftDigui\obj\Debug\LeftDigui.Properties.Resources.resources
+F:\MyGitHub\LeftDigui\LeftDigui\obj\Debug\LeftDigui.csproj.GenerateResource.Cache
