@@ -16,3 +16,13 @@ F:\MyGitHub\LeftDigui\LeftDigui\obj\Debug\LeftDigui.csprojResolveAssemblyReferen
 F:\MyGitHub\LeftDigui\LeftDigui\obj\Debug\LeftDigui.Form1.resources
 F:\MyGitHub\LeftDigui\LeftDigui\obj\Debug\LeftDigui.Properties.Resources.resources
 F:\MyGitHub\LeftDigui\LeftDigui\obj\Debug\LeftDigui.csproj.GenerateResource.Cache
+L:\Github\ClearLeftRecursion\LeftDigui\bin\Debug\LeftDigui.exe.config
+L:\Github\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.exe
+L:\Github\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.pdb
+L:\Github\ClearLeftRecursion\LeftDigui\bin\Debug\LeftDigui.exe
+L:\Github\ClearLeftRecursion\LeftDigui\bin\Debug\LeftDigui.pdb
+L:\Github\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.csprojResolveAssemblyReference.cache
+L:\Github\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.Form1.resources
+L:\Github\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.Properties.Resources.resources
+L:\Github\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.csproj.GenerateResource.Cache
+L:\Github\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.Form2.resources
