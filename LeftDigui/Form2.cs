@@ -25,6 +25,14 @@ namespace LeftDigui
         public Dictionary<string, string> FirstCollection = new Dictionary<string, string>();//First字典
         public Dictionary<string, string> FollowCollection = new Dictionary<string, string>();//Follow字典
 
+        List<string> Stack = new List<string>();//检测用户输入所用栈
+        List<string> UserData = new List<string>();//用户输入栈
+
+        Dictionary<string, Dictionary<string, string>> DictionaryList = new Dictionary<string, Dictionary<string, string>>();//顶级文法字典
+
+        string result = string.Empty;//推导过程记录
+        int resultindex = 1;//推导过程步骤
+
         string S = string.Empty;//文法开始符号
 
         private void Form2_Load(object sender, EventArgs e)
@@ -82,7 +90,7 @@ namespace LeftDigui
                 for (int j = 0; j < temp.Length; j++)
                 {
                     string Check = string.Empty;
-                    if (Final.Contains(temp[j]))//整体是终结符
+                    if (Final.Contains(temp[j]) ||temp[j]== "ε")//整体是终结符
                     {
                         tempFirst += temp[j] + ",";
                     }
@@ -92,7 +100,16 @@ namespace LeftDigui
 
                         if (Check == "hit")//遇到的第一个是非终结符
                         {
-                            tempFirst += FirstCollection[temp[j].Substring(0, 1)];
+                            string nextfirst=FirstCollection[temp[j].Substring(0, 1)];
+                            if (!tempFirst.Contains(nextfirst))
+                            {
+                                tempFirst += nextfirst;
+                            }
+                            
+                            if(Final.Contains(temp[j].Substring(1, 1)))
+                            {
+                                tempFirst += temp[j].Substring(1, 1) + ",";
+                            }
                         }
                         else
                         {
@@ -195,35 +212,46 @@ namespace LeftDigui
                 string check = temp + "`";
                 string nowitemvalue = item.Value.Replace(check, "X");
 
-                int index = nowitemvalue.IndexOf(temp);
-                if (index != -1)//含有E
+                List<int> indexall=new List<int>();
+                for(int i=0;i<item.Value.Length;i++)
                 {
-                    string now = nowitemvalue[index + 1].ToString();
-                    if (Final.Contains(now))//如果他后面是终结符--直接返回
+                    if(item.Value[i].ToString()==temp)
                     {
-                        follow += now+",";
+                        indexall.Add(i);
                     }
-                    else//如果不是，返回该非终结符的First集合
+                }
+                for (int i = 0; i < indexall.Count; i++)
+                {
+                    //int index = nowitemvalue.IndexOf(temp);
+                    if (indexall[i] != -1)//含有E
                     {
-                        string nowfinal = string.Empty;
-                        if (nowitemvalue[index + 2].ToString() == "`")
+                        string now = nowitemvalue[indexall[i] + 1].ToString();
+                        if (Final.Contains(now))//如果他后面是终结符--直接返回
                         {
-                            nowfinal = now + "`";
-                            follow += FirstCollection[nowfinal];
-                            
+                            follow += now + ",";
                         }
-                        else
+                        else//如果不是，返回该非终结符的First集合
                         {
-                            nowfinal = now;
-                            follow += FirstCollection[nowfinal];
-                        }
+                            string nowfinal = string.Empty;
+                            if (nowitemvalue[indexall[i] + 2].ToString() == "`")
+                            {
+                                nowfinal = now + "`";
+                                follow += FirstCollection[nowfinal];
 
-                        //检测该非终结符的导出式子是否含有ε
-                        if(TuidaoCollection[nowfinal].Contains("ε"))
-                        {
-                            follow += FollowCollection[nowfinal];
+                            }
+                            else
+                            {
+                                nowfinal = now;
+                                follow += FirstCollection[nowfinal];
+                            }
+
+                            //检测该非终结符的导出式子是否含有ε
+                            if (TuidaoCollection[nowfinal].Contains("ε"))
+                            {
+                                follow += FollowCollection[nowfinal];
+                            }
+
                         }
-                        
                     }
                 }
             }
@@ -233,13 +261,285 @@ namespace LeftDigui
 
         private void button3_Click(object sender, EventArgs e)
         {
-            List<Dictionary<string, string>> DictionaryList = new List<Dictionary<string, string>>();
-            for(int i=0;i<6;i++)
+
+            //List<Dictionary<string, Dictionary<string, string>>> DictionaryList = new List<Dictionary<string, Dictionary<string, string>>>();
+
+            textBox5.Text = "";
+            DictionaryList.Clear();
+            Stack.Clear();
+            UserData.Clear();
+            resultindex = 1;
+            if (DictionaryList.Count == 0)
             {
-                Dictionary<string, string> temp = new Dictionary<string, string>();//推导字典
-                DictionaryList.Add(temp);
+                string[] NotFinalitem = this.textBox1.Text.Split(';');//语法涉及的所有非终结符;
+                List<string> Finalitem = new List<string>();////语法涉及的所有终结符;
+
+                #region 填充语法涉及的所有终结符Finalitem;
+                foreach (var item in FirstCollection)
+                {
+                    string[] processs = item.Value.Split(',');
+                    for (int i = 0; i < processs.Length; i++)
+                    {
+                        if (!Finalitem.Contains(processs[i]) && processs[i] != "ε" && processs[i] != "")//去重去空
+                        {
+                            Finalitem.Add(processs[i]);
+                        }
+                    }
+                }
+
+                foreach (var item in FollowCollection)
+                {
+                    string[] processs = item.Value.Split(',');
+                    for (int i = 0; i < processs.Length; i++)
+                    {
+                        if (!Finalitem.Contains(processs[i]) && processs[i] != "ε" && processs[i] != "")//去重去空
+                        {
+                            Finalitem.Add(processs[i]);
+                        }
+                    }
+                }
+
+                #endregion
+
+                for (int i = 0; i < NotFinalitem.Length; i++)
+                {
+                    //Dictionary<string, Dictionary<string, string>> temp_top = new Dictionary<string, Dictionary<string, string>>();
+                    Dictionary<string, string> temp = new Dictionary<string, string>();
+                    for (int j = 0; j < Finalitem.Count; j++)
+                    {
+                        #region First集合造表
+                        if (FirstCollection[NotFinalitem[i]].Contains(Finalitem[j]))
+                        {
+
+                            string[] value = TuidaoCollection[NotFinalitem[i]].Split('|');
+                            //处理
+                            for (int u = 0; u < value.Length;u++ )
+                            {
+                                string tttt = value[u];
+                                for(int p=0;p<tttt.Length;p++)
+                                {
+                                    if(NotFinal.Contains(tttt[p].ToString())&&TuidaoCollection[tttt[p].ToString()]=="ε")
+                                    {
+                                        value[u]=value[u].Replace(tttt[p].ToString(), "");
+                                    }
+                                }
+                            }
+                                for (int k = 0; k < value.Length; k++)
+                                {
+                                    if (value[k][0].ToString() == Finalitem[j][0].ToString())//恰好匹配第一个终结符
+                                    {
+                                        temp.Add(Finalitem[j], value[k]);
+                                        break;
+                                    }
+                                    if (value.Length == 1)//只能导出一个式子
+                                    {
+                                        temp.Add(Finalitem[j], value[k]);
+                                        break;
+                                    }
+                                    if (value.Length == 2 && value[1] == "ε")//导出两个式子但第二个为空
+                                    {
+                                        temp.Add(Finalitem[j], value[k]);
+                                        break;
+                                    }
+                                }
+                        }
+                        #endregion
+
+                        //Follow集合造表
+                        else if (FollowCollection[NotFinalitem[i]].Contains(Finalitem[j]))
+                        {
+                            temp.Add(Finalitem[j], "ε");
+                        }
+                    }
+                    DictionaryList.Add(NotFinalitem[i], temp);
+                    //DictionaryList.Add(temp_top);
+                }
             }
             
+
+            //推导用户输入开始；
+            
+            result += "Step" + "\t" + "Stack" + "\t\t" + "UData" + "\r\n"; 
+
+            Stack.Add("#");//压入#
+            Stack.Add(S);//压入文法开始符号
+            string txt = textBox4.Text;
+            txt += "#";
+            //string[] UserDatatemp = textBox4.Text.Split(',');
+            
+            for(int i=0;i<txt.Length;i++)
+            {
+                UserData.Add(txt[i].ToString());
+            }
+            PrintResult();
+            int Index = 0;
+            
+
+            while(UserData.Count!=1)
+            {
+                string nowtop = gettop();//获取栈顶
+                if(nowtop=="#"&&UserData[Index]=="#")
+                {
+                    break;//当栈顶为#号时验证完毕；符合规范
+                }
+                else
+                {
+                    if(nowtop==UserData[Index])//栈顶元素和用户当前输入一致
+                    {
+                        UserData.Remove(nowtop);
+                        pop(nowtop);
+                    }
+                    else if (nowtop == "ε" || UserData[Index]=="#")//遇到空
+                    {
+                        pop(nowtop);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Dictionary<string, string> temp = DictionaryList[nowtop];//获得栈顶非终结符的表格字典
+                            pop(nowtop);//pop栈顶
+                            string check = temp[UserData[Index]];
+                            push(check);//反向压栈字典查到的推导
+                        }
+                        catch
+                        {
+                            MessageBox.Show("查表遇到异常，用户输入不符合规范");
+                            break;
+                        }
+                    }
+                }
+                PrintResult();
+            }
+
+            if (UserData.Count==1&&gettop()!="#")
+            {
+                pop(gettop());
+                PrintResult();
+            }
+            textBox5.Text = result;
+            if (gettop() == "#" && UserData[Index] == "#")
+            {
+                MessageBox.Show("符合规范！");
+
+            }
+            else
+            {
+                MessageBox.Show("不符合规范");
+            }
+            
+        }
+
+        //反向压栈
+        public void push(string temp)
+        {
+            if (Final.Contains(temp))
+            {
+                Stack.Add(temp);//压入纯终结符
+            }
+            else
+            {
+                for (int i = temp.Length - 1; i >= 0; i--)
+                {
+                    if (temp[i].ToString()=="`")
+                    {
+                        Stack.Add(temp[i-1].ToString()+"`");//压入E`
+                        i--;
+                    }
+                    else
+                    {
+                        Stack.Add(temp[i].ToString());
+                    }
+                    
+                }
+            }
+
+        }
+        //出栈
+        public void pop(string temp)
+        {
+            Stack.Remove(temp);
+        }
+        //获取栈顶
+        public string gettop()
+        {
+            return Stack[Stack.Count-1];
+        }
+
+        //输出结果
+        public void PrintResult()
+        {
+            result += "(" + resultindex + ")" + "\t";
+            for(int i=0;i<Stack.Count;i++)
+            {
+                result += Stack[i];
+            }
+            result += "\t\t";
+            for (int i = 0; i < UserData.Count; i++)
+            {
+                result += UserData[i];
+            }
+            result += "\r\n";
+            resultindex++;
+        }
+
+        private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }

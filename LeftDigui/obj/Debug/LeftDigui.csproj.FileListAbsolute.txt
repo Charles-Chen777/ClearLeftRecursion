@@ -36,3 +36,4 @@ F:\MyGitHub\LeftDigui\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.Form1.res
 F:\MyGitHub\LeftDigui\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.Form2.resources
 F:\MyGitHub\LeftDigui\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.Properties.Resources.resources
 F:\MyGitHub\LeftDigui\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.csproj.GenerateResource.Cache
+L:\Github\ClearLeftRecursion\LeftDigui\obj\Debug\LeftDigui.LR.resources
